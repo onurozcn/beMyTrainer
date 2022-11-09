@@ -5,7 +5,7 @@
   <section>
     <base-card>
       <div class="controls">
-        <base-button mode="outline">Refresh</base-button>
+        <base-button mode="outline" @click="loadTrainers">Refresh</base-button>
         <base-button v-if="!isTrainer" link to="/register">Register as Trainer</base-button>
       </div>
       <ul v-if="hasTrainers">
@@ -65,10 +65,16 @@ export default {
       return this.$store.getters['trainers/hasTrainers'];
     },
   },
+  created(){
+    this.loadTrainers();
+  },
   methods: {
     setFilters(updatedFilters) {
       this.activeFilters = updatedFilters;
     },
+    loadTrainers(){
+      this.$store.dispatch('trainers/loadTrainers')
+    }
   },
 };
 </script>

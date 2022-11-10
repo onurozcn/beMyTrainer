@@ -1,4 +1,7 @@
 <template>
+  <base-dialog :show="!!error" title="An error occured!" @close= "handleError">
+    <p>{{error}}</p>
+  </base-dialog>
   <section>
     <trainer-filter @change-filter="setFilters"></trainer-filter>
   </section>
@@ -43,6 +46,7 @@ export default {
         frontend: true,
         backend: true,
         career: true,
+        error: null
       },
     };
   },
@@ -78,8 +82,16 @@ export default {
     },
     async loadTrainers(){
       this.isLoading = true
-      await this.$store.dispatch('trainers/loadTrainers')
-      this.isLoading = false
+      try{
+        await this.$store.dispatch('trainers/loadTrainers')
+      }
+      catch(error){
+        this.error = error.message ||'Something went wrong!'
+      }
+        this.isLoading = false
+    },
+    handleError(){
+      this.error = null
     }
   },
 };
